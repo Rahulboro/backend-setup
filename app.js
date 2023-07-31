@@ -20,13 +20,20 @@ app.post("/register",(req, res )=>{
         const {firstnam, lastname, email, token}= req.body
         // validate the data if exists 
         if (!(email && password && lastname && fistname))
-        res.status(401).send
+        {
+            res.status(401).send
+        }
+        // check if the user exist in the database 
+    const existingUser = await User.findOne({email: email})
+    if (existingUser) {
+        res.status(401).send("already in database")
     }
+    
 
-    // check if the user exist in the database 
-    catch(error){
+
+
+}    catch(error){
         console.log(error);
         console.log("error of the respond route")
-
-}
+    }
 })
