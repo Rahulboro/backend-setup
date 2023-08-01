@@ -14,7 +14,7 @@ app.use(express.json())
 app.get("/", (req, res )=>{
     res.send("Hello home routes")
 })
-app.post("/register",(req, res )=>{
+app.post("/register",async(req, res )=>{
     try{
         // collection all information from the front end 
         const {firstnam, lastname, email, token}= req.body
@@ -28,8 +28,22 @@ app.post("/register",(req, res )=>{
     if (existingUser) {
         res.status(401).send("already in database")
     }
-    
 
+    //encrypting the password
+    const encryptedPassword = await bcrypt.hash(password,10)
+    
+    //creating a new entry in database 
+    
+    const newUser = await User.create({
+        firstnam,
+        lastname,
+        email,
+        password : encryptedPassword
+
+    })
+
+    // create a token and send it to user 
+    jwt.sign({}, '')
 
 
 }    catch(error){
